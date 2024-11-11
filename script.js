@@ -1,42 +1,30 @@
-// Espera a que el DOM esté completamente cargado
-document.addEventListener('DOMContentLoaded', function() {
-    // Obtener elementos del DOM
-    const navLinks = document.querySelectorAll('nav a');
-    const sections = document.querySelectorAll('main section');
-    const header = document.querySelector('header h1');
+document.getElementById('registroForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Evitar el envío del formulario para realizar validación
 
-    // Función para cambiar la sección activa
-    function setActiveSection(id) {
-        sections.forEach(section => {
-            if (section.id === id) {
-                section.style.display = 'block';
-            } else {
-                section.style.display = 'none';
-            }
-        });
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const mensaje = document.getElementById('mensaje');
+
+    // Validación básica
+    if (!nombre || !email || !password || !confirmPassword) {
+        mensaje.textContent = "Por favor, completa todos los campos.";
+        return;
     }
 
-    // Agregar eventos de clic a los enlaces de navegación
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sectionId = this.getAttribute('href').substring(1);
-            setActiveSection(sectionId);
-            header.textContent = `Bienvenido a ${this.textContent}`;
-        });
-    });
-
-    // Mostrar la sección de inicio por defecto
-    setActiveSection('inicio');
-
-    // Animación simple para el título principal
-    let opacity = 0;
-    function fadeIn() {
-        opacity += 0.1;
-        header.style.opacity = opacity;
-        if (opacity < 1) {
-            requestAnimationFrame(fadeIn);
-        }
+    // Verificar que las contraseñas coincidan
+    if (password !== confirmPassword) {
+        mensaje.textContent = "Las contraseñas no coinciden.";
+        return;
     }
-    fadeIn();
+
+    mensaje.textContent = "¡Registro exitoso!";
+    mensaje.style.color = "green";
+
+    // Simular envío de formulario
+    setTimeout(() => {
+        mensaje.textContent = "";
+        document.getElementById('registroForm').reset();
+    }, 2000);
 });
